@@ -1,0 +1,60 @@
+<div class="container">
+    <h1>Préstamo</h1>
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Identificador</mat-label>
+        <input type="text" matInput placeholder="Identificador" disabled>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <mat-label>Nombre del Cliente</mat-label>
+        <mat-select formControlName="client" [compareWith]="compareById" required>
+          <mat-option *ngFor="let client of clients; trackBy: trackByClientId" [value]="client">
+            {{client.name}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('client')?.hasError('required')">El cliente no puede estar vacío</mat-error>
+        <mat-error *ngIf="form.get('client')?.hasError('clientTooManyLoans')">Este cliente no puede tener más de dos juegos prestados en las fechas seleccionadas.</mat-error>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <mat-label>Nombre del Juego</mat-label>
+        <mat-select formControlName="game" [compareWith]="compareById" required>
+          <mat-option *ngFor="let game of games; trackBy: trackByGameId" [value]="game">
+            {{game.title}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="form.get('game')?.hasError('required')">El juego no puede estar vacío</mat-error>
+        <mat-error *ngIf="form.get('game')?.hasError('gameAlreadyLoaned')">Este juego ya está prestado a otro cliente en las fechas seleccionadas.</mat-error>
+      </mat-form-field>
+  
+      <h2>Fechas de préstamo</h2>
+      <div class="form-row">
+        <mat-form-field>
+          <mat-label>Fecha de Préstamo</mat-label>
+          <input matInput [matDatepicker]="dateStartPicker" formControlName="dateStart" required>
+          <mat-datepicker-toggle matIconSuffix [for]="dateStartPicker"></mat-datepicker-toggle>
+          <mat-datepicker #dateStartPicker></mat-datepicker>
+          <mat-error *ngIf="dateStartControl.hasError('required')">Fecha de préstamo necesaria</mat-error>
+          <mat-error *ngIf="dateStartControl.hasError('tooLong')">Préstamo no puede durar más de 14 días</mat-error>
+          <mat-error *ngIf="dateStartControl.hasError('rangeOrder')">Fecha de préstamo no puede ser posterior a la de devolución</mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Fecha de Devolución</mat-label>
+          <input matInput [matDatepicker]="dateEndPicker" formControlName="dateEnd" required>
+          <mat-datepicker-toggle matIconSuffix [for]="dateEndPicker"></mat-datepicker-toggle>
+          <mat-datepicker #dateEndPicker></mat-datepicker>
+          <mat-error *ngIf="dateEndControl.hasError('required')">Fecha de devolución necesaria</mat-error>
+          <mat-error *ngIf="dateEndControl.hasError('tooLong')">Préstamo no puede durar más de 14 días</mat-error>
+          <mat-error *ngIf="dateEndControl.hasError('rangeOrder')">Fecha de devolución no puede ser anterior a la de préstamo</mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  
+    <div class="buttons">
+      <button mat-stroked-button (click)="onClose()">Cancelar</button>
+      <button mat-flat-button color="primary" (click)="onSave()">Guardar</button>
+    </div>
+  </div>
+  
