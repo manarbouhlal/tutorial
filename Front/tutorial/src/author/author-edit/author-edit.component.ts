@@ -28,11 +28,25 @@ export class AuthorEditComponent implements OnInit {
     this.author = this.data.author ? Object.assign({}, this.data.author) : new Author();
   }
 
+  
+  
   onSave() {
-    this.authorService.saveAuthor(this.author).subscribe(() => {
-      this.dialogRef.close();
-    });
+      if (!this.author.name || this.author.name.trim() === '') {
+          alert('El nombre no puede estar vacío.');
+          return;
+      }
+  
+      if (!this.author.nationality || this.author.nationality.trim() === '') {
+          alert('La nacionalidad no puede estar vacía.');
+          return;
+      }
+  
+      this.authorService.saveAuthor(this.author).subscribe(() => {
+          this.dialogRef.close();
+      });
   }
+  
+  
 
   onClose() {
     this.dialogRef.close();

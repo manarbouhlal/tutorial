@@ -31,11 +31,15 @@ export class ClientListComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
+  
   ngOnInit(): void {
-    this.clientService
-      .getClients()
-      .subscribe((clients) => (this.dataSource.data = clients));
+      this.clientService.getClients().subscribe(clients => {
+          this.dataSource.data = clients;
+      }, error => {
+          console.error('Error obteniendo los clientes:', error);
+      });
   }
+  
 
   createClient() {
     const dialogRef = this.dialog.open(ClientEditComponent, {
@@ -57,17 +61,23 @@ export class ClientListComponent implements OnInit {
     });
   }
 
-  deleteClient(client: Client) {    
-    const dialogRef = this.dialog.open(DialogConfirmationComponent, {
-      data: { title: "Eliminar cliente", description: "Atención si borra el cliente se perderán sus datos.<br> ¿Desea eliminar el cliente?" }
-    });
+  
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.clientService.deleteClient(client.id).subscribe(result => {
-          this.ngOnInit();
-        }); 
-      }
-    });
-  } 
+  deleteClient(client: Client) {    
+        const dialogRef = this.dialog.open(DialogConfirmationComponent, {
+          data: { title: "Eliminar cliente", description: "Atención si borra el cliente se perderán sus datos.<br> ¿Desea eliminar el cliente?" }
+        });
+    
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.clientService.deleteClient(client.id).subscribe(() => {
+              this.ngOnInit(); 
+            }, error => {
+              console.error('Error eliminando el cliente:', error);
+            }); 
+          }
+        });
+    }
+    
+  
 }

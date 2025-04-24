@@ -63,11 +63,25 @@ export class GameEditComponent implements OnInit {
         });
     }
 
+    
+
     onSave() {
-        this.gameService.saveGame(this.game).subscribe((result) => {
-            this.dialogRef.close();
-        });
-    }
+            if (!this.game.title || this.game.title.trim() === '') {
+                alert('El título no puede estar vacío.');
+                return;
+            }
+        
+            if (this.game.age < 0) {
+                alert('La edad recomendada no puede ser negativa.');
+                return;
+            }
+        
+            this.gameService.saveGame(this.game).subscribe((result) => {
+                this.dialogRef.close();
+            });
+        }
+        
+    
 
     onClose() {
         this.dialogRef.close();

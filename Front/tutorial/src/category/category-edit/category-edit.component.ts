@@ -35,11 +35,18 @@ export class CategoryEditComponent implements OnInit {
       this.category = this.data.category ? Object.assign({}, this.data.category) : new Category();
     }
 
+    
     onSave() {
-        this.categoryService.saveCategory(this.category).subscribe(() => {
-            this.dialogRef.close();
-        });
+        if (!this.category.name || this.category.name.trim() === '') {
+            alert('El nombre no puede estar vacío.');
+            return;
+        }
+    
+        this.categoryService.saveCategory(this.category).subscribe(() => {
+            this.dialogRef.close();
+        });
     }
+    
 
     onClose() {
         this.dialogRef.close();

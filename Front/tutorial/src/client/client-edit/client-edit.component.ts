@@ -35,11 +35,18 @@ export class ClientEditComponent implements OnInit {
       this.client = this.data.client ? Object.assign({}, this.data.client) : new Client();
     }
 
+    
     onSave() {
-        this.clientService.saveClient(this.client).subscribe(() => {
-            this.dialogRef.close();
-        });
+        if (!this.client.name || this.client.name.trim() === '') {
+            alert('El nombre no puede estar vacío.');
+            return;
+        }
+    
+        this.clientService.saveClient(this.client).subscribe(() => {
+            this.dialogRef.close();
+        });
     }
+    
 
     onClose() {
         this.dialogRef.close();

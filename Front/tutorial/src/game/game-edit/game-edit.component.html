@@ -16,11 +16,14 @@
             <mat-error>El título no puede estar vacío</mat-error>
         </mat-form-field>
 
+       
         <mat-form-field>
-            <mat-label>Edad recomendada</mat-label>
-            <input type="number" matInput placeholder="Edad recomendada" [(ngModel)]="game.age" name="age" required>
-            <mat-error>La edad no puede estar vacía</mat-error>
-        </mat-form-field>
+            <mat-label>Edad recomendada</mat-label>
+            <input type="number" matInput placeholder="Edad recomendada" [(ngModel)]="game.age" name="age" required>
+            <mat-error *ngIf="game.age < 0">La edad recomendada no puede ser negativa</mat-error>
+            <mat-error>La edad no puede estar vacía</mat-error>
+        </mat-form-field>
+    
 
         <mat-form-field>
             <mat-label>Categoría</mat-label>

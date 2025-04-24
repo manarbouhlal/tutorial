@@ -10,11 +10,13 @@
             <input type="text" matInput placeholder="Identificador" [(ngModel)]="category.id" name="id" disabled>
         </mat-form-field>
 
+        
         <mat-form-field>
-            <mat-label>Nombre</mat-label>
-            <input type="text" matInput placeholder="Nombre de categoría" [(ngModel)]="category.name" name="name" required>
-            <mat-error>El nombre no puede estar vacío</mat-error>
+            <mat-label>Nombre</mat-label>
+            <input type="text" matInput placeholder="Nombre de categoría" [(ngModel)]="category.name" name="name" required>
+            <mat-error *ngIf="!category.name || category.name.trim() === ''">El nombre no puede estar vacío</mat-error>
         </mat-form-field>
+    
     </form>
 
     <div class="buttons">
